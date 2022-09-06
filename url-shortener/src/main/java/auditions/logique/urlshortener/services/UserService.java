@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import auditions.logique.urlshortener.dto.AuthDTO;
 import auditions.logique.urlshortener.dto.CreateUserDTO;
 import auditions.logique.urlshortener.entities.User;
 import auditions.logique.urlshortener.repositories.UserRepository;
@@ -17,6 +18,12 @@ public class UserService {
 
   public List<User> getAllUsers() {
     return this.repository.findAll();
+  }
+
+  public User signIn(AuthDTO dto) {
+    var user = this.repository.findByEmailAndPassword(dto.getEmail(), dto.getPassword());
+
+    return user;
   }
 
   public User create(CreateUserDTO dto) {
