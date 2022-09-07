@@ -14,8 +14,8 @@ import lombok.AllArgsConstructor;
 public class URLService {
   private final URLRepository repository;
 
-  public List<URL> listAll() {
-    return this.repository.findAll();
+  public List<URL> listAll(String userId) {
+    return this.repository.findByUserId(userId);
   }
 
   public URL create(CreateURLDTO dto, String userId) {

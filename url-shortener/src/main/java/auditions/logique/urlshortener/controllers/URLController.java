@@ -20,9 +20,9 @@ import lombok.AllArgsConstructor;
 public class URLController {
   private final URLService service;
 
-  @GetMapping
-  public List<URL> findAll() {
-    return this.service.listAll();
+  @GetMapping("/{userID}")
+  public List<URL> findAll(@PathVariable String userID) {
+    return this.service.listAll(userID);
   }
 
   @PostMapping("/{userID}")
