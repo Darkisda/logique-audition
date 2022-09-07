@@ -6,4 +6,5 @@ import auditions.logique.urlshortener.entities.User;
 
 public interface UserRepository extends MongoRepository<User, String> {
   User findByEmailAndPassword(String email, String password);
+  User findByEmail(String email);
 }

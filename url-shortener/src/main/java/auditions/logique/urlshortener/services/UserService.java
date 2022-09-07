@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import auditions.logique.urlshortener.dto.AuthDTO;
 import auditions.logique.urlshortener.dto.CreateUserDTO;
 import auditions.logique.urlshortener.entities.User;
-import auditions.logique.urlshortener.errors.NotFoundUser;
+import auditions.logique.urlshortener.errors.AlreadyExistUser;
 import auditions.logique.urlshortener.errors.UnauthorizedLogin;
 import auditions.logique.urlshortener.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -33,6 +33,12 @@ public class UserService {
   }
 
   public User create(CreateUserDTO dto) {
+    var alreadyExistUser = this.repository.findByEmail(dto.getEmail());
+
+    if (alreadyExistUser != null) {
+      throw new AlreadyExistUser();
+    }
+
     var user = new User();
     user.setEmail(dto.getEmail());
     user.setPassword(dto.getPassword());
