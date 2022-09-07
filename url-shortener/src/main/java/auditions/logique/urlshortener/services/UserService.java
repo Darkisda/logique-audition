@@ -8,6 +8,7 @@ import auditions.logique.urlshortener.dto.AuthDTO;
 import auditions.logique.urlshortener.dto.CreateUserDTO;
 import auditions.logique.urlshortener.entities.User;
 import auditions.logique.urlshortener.errors.AlreadyExistUser;
+import auditions.logique.urlshortener.errors.NotFoundUser;
 import auditions.logique.urlshortener.errors.UnauthorizedLogin;
 import auditions.logique.urlshortener.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -47,6 +48,12 @@ public class UserService {
   }
 
   public void delete(String id) {
+    var userWhoShouldMayBeDeleted = this.repository.findById(id);
+
+    if (userWhoShouldMayBeDeleted == null) {
+      throw new NotFoundUser();
+    }
+
     this.repository.deleteById(id);
     return;
   }

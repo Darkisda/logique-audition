@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CreateURLDTO {
+  private String baseURL;
   private String originURL;
 }
