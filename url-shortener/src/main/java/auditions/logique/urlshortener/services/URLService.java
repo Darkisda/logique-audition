@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import auditions.logique.urlshortener.dto.CreateURLDTO;
 import auditions.logique.urlshortener.entities.URL;
 import auditions.logique.urlshortener.repositories.URLRepository;
-import auditions.logique.urlshortener.repositories.UserRepository;
 import auditions.logique.urlshortener.viewmodels.URLViewModel;
 import lombok.AllArgsConstructor;
 

@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+  backend-url-shrotener:
+    container_name: backend
+    build: 
+      context: ../url-shortener
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "db-url-shorterner"
+    networks:
+      - "url-shortener-network"
 
   db-url-shorterner:
     container_name: db
@@ -13,3 +24,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
+    networks:
+      - "url-shortener-network"
+
+networks:
+    url-shortener-network:
+        driver: bridge
