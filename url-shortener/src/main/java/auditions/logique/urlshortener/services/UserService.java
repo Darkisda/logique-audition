@@ -1,7 +1,10 @@
 package auditions.logique.urlshortener.services;
 
+import java.text.DateFormat;
+import java.time.Duration;
 import java.util.List;
 
+import org.springframework.boot.web.server.Cookie;
 import org.springframework.stereotype.Service;
 
 import auditions.logique.urlshortener.dto.AuthDTO;
@@ -13,7 +16,6 @@ import auditions.logique.urlshortener.errors.UnauthorizedLogin;
 import auditions.logique.urlshortener.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 
-
 @AllArgsConstructor
 @Service
 public class UserService {
@@ -21,6 +23,16 @@ public class UserService {
 
   public List<User> getAllUsers() {
     return this.repository.findAll();
+  }
+
+  public User findById(String id) {
+    var user = this.repository.findById(id);
+
+    if (!user.isPresent()) {
+      throw new NotFoundUser();
+    }
+
+    return user.get();
   }
 
   public User signIn(AuthDTO dto) {

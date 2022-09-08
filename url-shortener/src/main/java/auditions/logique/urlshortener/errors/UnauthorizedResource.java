@@ -1,0 +1,11 @@
+package auditions.logique.urlshortener.errors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.UNAUTHORIZED)
+public class UnauthorizedResource extends RuntimeException {
+  public UnauthorizedResource() {
+    super("Não autorizado");
+  }
+}

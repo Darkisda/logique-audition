@@ -1,8 +1,14 @@
 package auditions.logique.urlshortener.controllers;
 
+import java.time.Duration;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +28,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/user")
-@CrossOrigin("*")
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class UserController {
   private final UserService service;
 
@@ -32,8 +38,20 @@ public class UserController {
   }
 
   @PostMapping("/signin")
-  public ResponseEntity<User> signin(@RequestBody AuthDTO dto) {
-    return new ResponseEntity<>(this.service.signIn(dto), HttpStatus.OK);
+  public ResponseEntity<String> signin(@RequestBody AuthDTO dto, HttpServletResponse response) {
+    var user = this.service.signIn(dto);
+
+    var cookie = ResponseCookie
+        .from("user-id", user.get_id())
+        .httpOnly(true)
+        .secure(true)
+        // .maxAge((3600 * 24))
+        .maxAge(60)
+        .path("/url")
+        .domain("localhost")
+        .build();
+
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(cookie.toString());
   }
 
   @PostMapping("/signup")

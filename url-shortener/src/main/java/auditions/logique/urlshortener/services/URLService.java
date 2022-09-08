@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import auditions.logique.urlshortener.dto.CreateURLDTO;
 import auditions.logique.urlshortener.entities.URL;
 import auditions.logique.urlshortener.repositories.URLRepository;
+import auditions.logique.urlshortener.repositories.UserRepository;
 import auditions.logique.urlshortener.viewmodels.URLViewModel;
 import lombok.AllArgsConstructor;
 
@@ -14,8 +15,11 @@ import lombok.AllArgsConstructor;
 @Service
 public class URLService {
   private final URLRepository repository;
+  private final UserService userService;
 
   public Stream<URLViewModel> listAll(String userId) {
+    var user = this.userService.findById(userId);
+
     var result = this.repository
         .findByUserId(userId)
         .stream()

@@ -2,6 +2,8 @@ import { FormEvent, useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import api from "../../api/api";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
+import Head from "next/head";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -9,13 +11,33 @@ export default function Login() {
 
   const [errors, setErrors] = useState<string>();
 
+  const [cookies, setCookie] = useCookies(["user-id"]);
+
+  function sanitizeCookieValue(cookie: string, value: string) {
+    return cookie;
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     try {
-      await api.post("/user/signin", {
+      const resp = await api.post("/user/signin", {
         email,
         password,
+      });
+
+      const userID = resp.data
+        .split(";")
+        .find((v: string) => v.startsWith("user-id"))
+        .split("=")[1];
+
+      const expires = resp.data
+        .split(";")
+        .find((v: string) => v.startsWith(" Expires"))
+        .split("=")[1];
+
+      setCookie("user-id", userID, {
+        expires: new Date(expires),
       });
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -32,6 +54,9 @@ export default function Login() {
 
   return (
     <div className="container mx-auto h-full max-w-4xl">
+      <Head>
+        <title>URL Shortener | Login</title>
+      </Head>
       <main className="w-full h-full flex items-center justify-center content-center flex-col p-2">
         <div className="w-10/12 md:w-4/6 lg:w-2/4 h-3/6 lg:h-2/6 rounded-lg bg-white shadow p-4">
           <h1 className="text-3xl font-thin">Login</h1>
